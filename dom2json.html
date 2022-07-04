@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="div">
+      <span>
+        <a></a>
+      </span>
+      <span>
+        <a>哈哈哈1</a>
+        <a>哈哈哈2</a>
+      </span>
+    </div>
+
+    <script>
+      function dom2json(node) {
+        if (!node) {
+          return;
+        }
+
+        let newNode = {};
+        newNode.tag = node.nodeName;
+        newNode.children = [];
+
+        Array.from(node.children).forEach((child) => {
+          newNode.children.push(dom2json(child));
+        });
+
+        return newNode;
+      }
+
+      console.log(dom2json(div));
+    </script>
+  </body>
+</html>
