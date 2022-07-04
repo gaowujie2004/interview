@@ -1,6 +1,8 @@
 // 99
 // 99
 //   98
+export {};
+
 function add(n1: string, n2: string) {
   const len = Math.max(n1.length, n2.length);
   n1 = n1.padStart(len, '0');
