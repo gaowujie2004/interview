@@ -35,4 +35,6 @@ function addList(...args) {
   return args.reduce((memo, next) => add(memo, next));
 }
 
+/**================================== 测试 **/
+
 console.log('多个参数', addList('111', '999', '888'));
