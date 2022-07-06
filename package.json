@@ -1,0 +1,23 @@
+{
+  "name": "interview",
+  "version": "1.0.0",
+  "description": "",
+  "main": "apply.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gaowujie2004/interview.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gaowujie2004/interview/issues"
+  },
+  "homepage": "https://github.com/gaowujie2004/interview#readme",
+  "devDependencies": {
+    "jest": "^28.1.2"
+  }
+}
