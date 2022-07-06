@@ -1,4 +1,4 @@
-const deepEq = require('../deepEq');
+const deepEq = require('../deep-eq');
 
 test('基本值/函数', () => {
   expect(deepEq()).toBe(true);
