@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>throttle 节流测试</title>
+    <style>
+      button {
+        padding: 20px;
+        font-size: 30px;
+      }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.19/lodash.js"></script>
+  </head>
+  <body>
+    <button id="button">Click me</button>
+
+    <script src="./throttle.js"></script>
+    <script>
+      function handleClick(ev) {
+        console.log('click', this);
+      }
+      button.onclick = throttle(handleClick, 1000, { leading: true, trailing: true });
+    </script>
+  </body>
+</html>
