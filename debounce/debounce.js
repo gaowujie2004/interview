@@ -1,4 +1,6 @@
 function debounce(fn, options) {
+  console.log('myDebounce');
+
   options = Object.assign(
     {
       leading: false,
@@ -11,6 +13,8 @@ function debounce(fn, options) {
   let fnCallRet = undefined;
 
   return function wrap() {
+    window.lastClick = performance.now();
+
     timerId && clearTimeout(timerId); // 有定时器就清楚，说明现在不该你执行。
     const now = Date.now();
 
