@@ -21,7 +21,8 @@
       function handleClick(ev) {
         console.log('click', this);
       }
-      button.onclick = throttle(handleClick, 1000, { leading: true, trailing: true });
+      // button.onclick = _.throttle(handleClick, 1000, { leading: true, trailing: true });
+      button.onclick = throttle(handleClick, { head: true, tail: true, wait: 1000 });
     </script>
   </body>
 </html>

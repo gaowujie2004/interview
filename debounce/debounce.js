@@ -16,33 +16,21 @@ function debounce(fn, options) {
 
     // 立即执行
     if (options.leading && !timerId) {
+      // 与立即执行关联
+      timerId = setTimeout(() => {
+        timerId = false;
+      }, options.wait);
+
       fnCallRet = fn.apply(this, arguments);
+    } else if (options.trailing) {
+      timerId = setTimeout(() => {
+        timerId = false;
+
+        // 管理延迟执行
+        fnCallRet = fn.apply(this, arguments);
+      }, options.wait);
     }
 
-    timerId = setTimeout(() => {
-      timerId = false;
-      // 以上逻辑与立即执行关联
-
-      // 管理延迟执行
-      if (options.trailing) {
-        fnCallRet = fn.apply(this, arguments);
-      }
-    }, options.wait);
-
     return fnCallRet;
-  };
-}
-
-// 延迟
-function debounce(fn, wait) {
-  let timerId = false;
-
-  return function (...args) {
-    timerId && clearTimeout(timerId);
-
-    timerId = setTimeout(() => {
-      timerId = false;
-      fn.apply(this, args);
-    }, wait);
   };
 }

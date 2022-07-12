@@ -21,9 +21,15 @@
       function handleClick(ev) {
         console.log('click', this);
       }
-      button.onclick = debounce(handleClick, 1000, {
-        leading: false,
+      // button.onclick = _.debounce(handleClick, 1000, {
+      //   leading: true,
+      //   trailing: true,
+      // });
+
+      button.onclick = debounce(handleClick, {
+        leading: true,
         trailing: true,
+        wait: 1000,
       });
     </script>
   </body>
