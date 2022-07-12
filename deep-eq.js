@@ -7,6 +7,10 @@ const isObject = (val) => !!val && typeof val === 'object';
  * @returns {boolean}
  */
 function deepEq(value1, value2) {
+  if (value1 === value2) {
+    return true;
+  }
+
   // 基本值 || 函数
   if (!isObject(value1) || !isObject(value2)) {
     return value1 === value2;
