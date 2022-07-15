@@ -210,22 +210,19 @@ class Promise {
   }
 }
 
-let p2 = Promise.resolve().then((val) => p2);
+Promise.resolve()
+  .then(function log0() {
+    console.log(0);
+    return Promise.resolve(4);
+  })
+  .then(function log4() {
+    console.log(res);
+  });
 
-Promise.all;
-Promise.race;
-Promise.allSettled; // 把所有的结果值解出来
-Promise.any; // 和all对立, 只要有一个成功就返回那个成功的，要是全失败就返回一个失败的promise，把错误集合在一起
-
-Promise.any = (promises) =>
-  Promise.all(
-    promises.map((p) =>
-      Promise.resolve(p).then(
-        (val) => Promise.reject(val),
-        (err) => err
-      )
-    )
-  ).then(
-    (errs) => Promise.reject(errs),
-    (val) => val
-  );
+Promise.resolve()
+  .then(function log1() {
+    console.log(1);
+  })
+  .then(function log2() {
+    console.log(2); //
+  });
