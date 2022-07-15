@@ -17,12 +17,14 @@
     <button id="button">Click me</button>
 
     <script src="./throttle.js"></script>
+    <script src="./throttle2.js"></script>
     <script>
       function handleClick(ev) {
         console.log('click', this);
       }
       // button.onclick = _.throttle(handleClick, 1000, { leading: true, trailing: true });
-      button.onclick = throttle(handleClick, { head: true, tail: true, wait: 1000 });
+      // button.onclick = throttle(handleClick, { head: true, tail: true, wait: 1000 });
+      button.onclick = throttle(handleClick, { head: false, tail: true, wait: 1000 });
     </script>
   </body>
 </html>

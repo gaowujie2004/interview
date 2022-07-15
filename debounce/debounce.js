@@ -16,7 +16,6 @@ function debounce(fn, options) {
     window.lastClick = performance.now();
 
     timerId && clearTimeout(timerId); // 有定时器就清楚，说明现在不该你执行。
-    const now = Date.now();
 
     // 立即执行，与延迟执行是互斥的，所以这样写
     if (options.leading && !timerId) {

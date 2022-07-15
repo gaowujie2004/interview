@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      const noop = () => {};
+
+      /**
+       * let promise2 = p.then(callback1, callback2),
+       * promise2 的状态和结果，由 callback1、callback2的函数返回值决定
+       *
+       * @param {*} promise2  promise2, 即 p.then()  then() 返回的Promise实力
+       * @param {*} x         p.then(onCallback1, onCallback2)  onCallback1\2函数的返回值
+       * @param {*} resolve   决定promise2，是成功还是失败
+       * @param {*} reject    同上
+       */
+      function resolvePromise(promise2, x, resolve, reject) {
+        if (promise2 === x) {
+          console.log('相等');
+          throw new TypeError('不能这样做');
+          /**
+           * let promise2 = Promise.resolve.then(val => promise2)
+           */
+        }
+
+        if (x && typeof x === 'object') {
+        } else {
+          // 基本值
+          resolve(x);
+          return;
+        }
+      }
+
+      class Promise {
+        #PromiseResult = undefined;
+        #PromiseState = 'pending'; // 'fulfilled' | 'rejected' | 'pending';
+        #onFulfilledList = [];
+        #onRejectedList = [];
+
+        constructor(executeCallback) {
+          if (typeof executeCallback !== 'function') {
+            throw new TypeError('必须要传递回调函数');
+          }
+
+          const resolve = (value) => {
+            if (this.#PromiseState !== 'pending') return;
+
+            this.#PromiseResult = value;
+            this.#PromiseState = 'fulfilled';
+            this.#onFulfilledList.forEach((fn) => {
+              fn();
+            });
+          };
+          const reject = (reason) => {
+            if (this.#PromiseState !== 'pending') return;
+
+            this.#PromiseResult = reason;
+            this.#PromiseState = 'rejected';
+            this.#onRejectedList.forEach((fn) => {
+              fn();
+            });
+          };
+
+          try {
+            executeCallback(resolve, reject);
+          } catch (err) {
+            reject(err);
+          }
+        }
+
+        then(onResolve, onReject) {
+          // then() 返回值
+          const promise2 = new Promise((resolve, reject) => {
+            if (this.#PromiseState === 'pending') {
+              this.#onFulfilledList.push(() => {
+                setTimeout(() => {
+                  try {
+                    const x = onResolve(this.#PromiseResult);
+                    resolvePromise(promise2, x, resolve, reject);
+                  } catch (err) {
+                    reject(err);
+                  }
+                });
+              });
+              this.#onRejectedList.push(() => {
+                setTimeout(() => {
+                  try {
+                    const x = onReject(this.#PromiseResult);
+                    resolve(x);
+                  } catch (err) {
+                    reject(err);
+                  }
+                });
+              });
+
+              return;
+            }
+
+            if (this.#PromiseState === 'fulfilled') {
+              // todo: 先暂时
+              setTimeout(() => {
+                try {
+                  var x = onResolve(this.#PromiseResult);
+                } catch (err) {
+                  reject(err);
+                  return;
+                }
+
+                resolvePromise(promise2, x, resolve, reject);
+              }, 0);
+
+              return;
+            }
+
+            if (this.#PromiseState === 'rejected') {
+              setTimeout(() => {
+                try {
+                  // todo: 先暂时
+                  const x = onReject(this.#PromiseResult);
+                  resolvePromise(promise2, x, resolve, reject);
+                } catch (err) {
+                  reject(err);
+                }
+              }, 0);
+
+              return;
+            }
+          });
+
+          return promise2;
+        }
+      }
+
+      let p1 = new Promise((resolve, reject) => {
+        resolve('okok');
+      });
+
+      let p2 = p1.then((val) => p2);
+    </script>
+  </body>
+</html>
