@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      function mySetTimeout(cb, delay, ...args) {
+        function impl() {
+          // timerId 可以被访问，因为impl是异步调用的
+          clearInterval(timerId);
+          cb(...args);
+        }
+        const timerId = setInterval(impl, delay);
+
+        return timerId;
+      }
+
+      function setInterval(cb, delay, ...args) {
+        function impl() {
+          // 嵌套的setTimeout会有4ms延迟，另外如果cb阻塞了主线程，影响了定时器，那么delay要提前
+          timerId = setTimeout(impl, delay);
+          cb(...args);
+        }
+
+        let timerId = setTimeout(impl, delay);
+
+        return function clearTimeout() {
+          clearTimeout(timerId);
+        };
+      }
+
+      let prevTime = performance.now();
+      setTimeout(function fn() {
+        const now = performance.now();
+        console.log(now - prevTime);
+        prevTime = now;
+        // todo
+        setTimeout(fn, 1000);
+        // 执行完处理程序的内容后，在末尾再间隔10毫秒来调用该程序，这样就能保证一定是10毫秒的周期调用,这里时间按自己的需求来写
+      }, 1000);
+    </script>
+  </body>
+</html>

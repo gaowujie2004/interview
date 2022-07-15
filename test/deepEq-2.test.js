@@ -34,12 +34,25 @@ test('Array 简单的', () => {
   expect(deepEq([1, 2, 3, 4, 5, 6], [1, 2, 3, 4, 5, 6])).toBe(true);
 });
 
-test('Object 循环引用', () => {
+test('Object 循环引用-1', () => {
   let obj1 = { a: 1 };
   let obj2 = { a: 1 };
 
   obj1.b = obj2;
   obj2.b = obj1;
+
+  // 忽略顺序
+  expect(deepEq(obj1, obj2)).toBe(true);
+});
+
+test('Object 循环引用-2', () => {
+  let obj1 = { a: 1 };
+  let obj2 = { a: 1 };
+  let obj3 = { a: 1 };
+
+  obj1.b = obj2;
+  obj2.b = obj3;
+  obj3.b = obj1;
 
   // 忽略顺序
   expect(deepEq(obj1, obj2)).toBe(true);
