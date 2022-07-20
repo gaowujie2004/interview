@@ -1,10 +1,11 @@
 /**
- * 目标：实现删除一个深文件夹，即删除 a 文件夹，但 a 有还有文件夹和文件。
+ * 目标：实现一个深度修改文件夹下的文件名。
+ * public/a.txt  public/b.txt ....，修改成 public/a-1.txt、public/a-2.txt ......
  *
  * 使用 async-await，以及 fs/promise 文件系统，最终形态
  * 好处：
  * 1、统一处理错误（也能够针对某个处理）
- * 2、很简洁，易懂
+ * 2、很简洁、易懂
  */
 
 const fs = require('fs/promises');
@@ -13,13 +14,13 @@ const join = (...args) => {
   return path.resolve(__dirname, ...args);
 };
 
-// 删除深文件夹 —— Promise
 async function rmdir(rootPath, fileCount) {
   const rootState = await fs.stat(rootPath);
 
+  // 递归的退出条件
   // rootPath，是叶子节点，是文件
   if (rootState.isFile()) {
-    if (!fileCount) return '请传入目录路径，而不是文件路径';
+    if (fileCount === 0) return '请传入目录路径，而不是文件路径';
 
     await fs.rename(rootPath, rootPath.replace(/(?=\.\w+$)/, String(fileCount)));
     return;
@@ -34,8 +35,7 @@ async function rmdir(rootPath, fileCount) {
   let resList = childrenPaths.map((childPath, index) => rmdir(childPath, index + 1));
   await Promise.all(resList);
 
-  // 子节点全部删除完，再删除自身
-  // await fs.rmdir(rootPath);
+  // 叶子节点全部修改完毕。
 }
 
 rmdir(join('./test'))
