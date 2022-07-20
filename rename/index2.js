@@ -29,4 +29,10 @@ async function deepRename(rootPath, fileCount = 0) {
   // rootPath的叶子节点都修改完毕后，程序执行到这里 <-----
 }
 
-deepRename(join('./test'));
+deepRename(join('./test'))
+  .then(() => {
+    console.log('修改完毕');
+  })
+  .catch((err) => {
+    console.log('-----------', '修改失败');
+  });
