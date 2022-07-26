@@ -22,19 +22,19 @@ class LRUCache {
   // 存在，看看是否溢出
   put(key, value) {
     if (this.map.has(key)) {
-      // 存在，仅修改
+      // 存在，仅修改，那么这个key就是最新的
       this.map.delete(key);
-
+      this.map.set(key, value);
       return;
     } else if (this.map.size <= this.maxSize) {
-      // 未溢出，插入
+      // 未溢出，插入，默认最后面
+      this.map.set(key, value);
     } else {
       // 溢出，插入
+      this.map.set(key, value);
 
-      // 删除最旧的，map是有序的
-      this.map.delete(this.map.keys().next().value);
+      // 删除最旧的
+      this.map.delete(this.ma);
     }
-
-    this.map.set(key, value);
   }
 }
