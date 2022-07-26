@@ -158,8 +158,3 @@ class Promise {
     return promise2;
   }
 }
-
-// new Promise((resolve, reject) => {
-//   resolve();
-//   reject();
-// });
