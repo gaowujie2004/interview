@@ -14,6 +14,8 @@ function throttle3(fn, options) {
     const now = Date.now();
     // 立即执行
     if (options.head && now - prevCallTime >= options.wait) {
+      console.log('立即执行', now);
+
       prevCallTime = now;
       fnRes = fn.apply(this, args);
 
@@ -24,6 +26,7 @@ function throttle3(fn, options) {
     } else if (options.tail && !timerId) {
       timerId = setTimeout(() => {
         timerId = 0;
+        prevCallTime = Date.now();
         fnRes = fn.apply(this, args);
       }, options.wait);
     }

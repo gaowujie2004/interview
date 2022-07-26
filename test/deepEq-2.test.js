@@ -58,6 +58,20 @@ test('Object 循环引用-2', () => {
   expect(deepEq(obj1, obj2)).toBe(true);
 });
 
+test('Object 循环引用-3', () => {
+  const a = {},
+    b = {};
+
+  a.c = b;
+  a.d = b;
+
+  b.c = a;
+  b.d = a;
+
+  // 忽略顺序
+  expect(deepEq(a, b)).toBe(true);
+});
+
 test('复杂的1', () => {
   let o1 = {
     a: 1,

@@ -16,15 +16,31 @@
   <body>
     <button id="button">Click me</button>
 
-    <script src="./throttle.js"></script>
-    <script src="./throttle2.js"></script>
+    <!-- <script src="./throttle.js"></script> -->
+    <script src="./throttle3.js"></script>
     <script>
+      let timeLine = [];
       function handleClick(ev) {
         console.log('click', this);
+        timeLine.push(performance.now());
       }
       // button.onclick = _.throttle(handleClick, 1000, { leading: true, trailing: true });
       // button.onclick = throttle(handleClick, { head: true, tail: true, wait: 1000 });
-      button.onclick = throttle(handleClick, { head: false, tail: true, wait: 1000 });
+      button.onclick = throttle3(handleClick, { head: true, tail: true, wait: 2000 });
+
+      let throttleHandleClick = throttle3(handleClick, { head: true, tail: true, wait: 1000 });
+
+      setTimeout(() => {
+        throttleHandleClick();
+      }, 0);
+
+      setTimeout(() => {
+        throttleHandleClick();
+      }, 500);
+
+      // setTimeout(() => {
+      //   throttleHandleClick();
+      // }, 2590);
     </script>
   </body>
 </html>

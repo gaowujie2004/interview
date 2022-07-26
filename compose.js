@@ -5,7 +5,7 @@ function compose(...fns) {
   return fns.reduce(
     (memo, cur) =>
       (...args) =>
-        memo(cur(args))
+        memo(cur(...args))
   );
 }
 
