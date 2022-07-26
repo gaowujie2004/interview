@@ -64,6 +64,7 @@ class Promise {
       } else {
         this.result = value;
         this.status = FULFILLED;
+        this.onFulfilledList.forEach((fn) => fn());
       }
     };
     const reject = (reason) => {
