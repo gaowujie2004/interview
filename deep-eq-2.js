@@ -15,7 +15,7 @@ function deepEq(value1, value2) {
   if (value1 === value2) {
     return true;
   } else {
-    // 只要有一个 基本值||函数
+    // 只要有一个 基本值||函数，因为要结构相同才能比较
     // 即一个引用值 一个基本值
     if (!isObject(value1) || !isObject(value2)) {
       return false;
