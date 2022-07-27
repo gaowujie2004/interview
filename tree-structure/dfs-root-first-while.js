@@ -1,3 +1,4 @@
+// 迭代模拟栈
 const tree = {
   name: 'root',
   children: [
@@ -30,22 +31,18 @@ const tree = {
   ],
 };
 
-function solve(root) {
-  const stack = [];
-  if (!root) return [];
-  stack.push(root);
-
+function dfsRootFirstWhile(root) {
+  const stack = [root];
   while (stack.length) {
-    let node = stack.pop();
-    if (node === null) continue;
+    const cur = stack.pop();
 
-    console.log(node.name);
+    console.log('--node', cur.name);
 
-    for (let i = node.children.length - 1; i >= 0; i--) {
-      // 这里就是面试的重点,应该从后面的节点压入栈中
-      stack.push(node.children[i]);
+    // 倒序，因为是栈，先进后出
+    for (let i = cur.children.length - 1; i >= 0; i--) {
+      stack.push(cur.children[i]);
     }
   }
 }
 
-solve(tree);
+dfsRootFirstWhile(tree);
