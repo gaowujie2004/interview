@@ -6,28 +6,22 @@ Function.prototype.myBind = function (context, ...outArgs) {
   const fn = this;
   const fnKey = Symbol('fnKey');
 
-  function bindRetFn(...innerArgs) {
-    if (new.target) {
-      return new fn(...outArgs, ...innerArgs);
-    } else {
-      if (context === null || context === undefined) {
-        return fn(...outArgs, ...innerArgs);
-      }
-
-      context = Object(context);
-      Object.defineProperty(context, fnKey, {
-        value: fn,
-        configurable: true, // delete need
-      });
-      const fnRet = context[fnKey](...outArgs, ...innerArgs);
-      delete context[fnKey];
-
-      return fnRet;
+  const bindRetFn = (...innerArgs) => {
+    if (context === null || context === undefined) {
+      return fn(...outArgs, ...innerArgs);
     }
-  }
 
-  // 关键，new bindRetFn，其实还是 new fn.
-  bindRetFn.prototype = fn.prototype;
+    context = Object(context);
+    Object.defineProperty(context, fnKey, {
+      value: fn,
+      configurable: true, // delete need
+    });
+    const fnRet = context[fnKey](...outArgs, ...innerArgs);
+    delete context[fnKey];
+
+    return fnRet;
+  };
+
   return bindRetFn;
 };
 
