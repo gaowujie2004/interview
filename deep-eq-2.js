@@ -87,7 +87,7 @@ function deepEq(value1, value2) {
     return true;
   }
 
-  // Set、Map 等其他结构，暂不考虑
+  // RegExp Date暂时不考虑
   // 为什么false，因为开头已经引用判断了
   return false;
 }
