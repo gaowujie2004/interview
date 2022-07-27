@@ -27,5 +27,5 @@ function test(a1, a2) {
   console.log('a2, a2, this---', a1, a2, this);
 }
 
-test.myCall(null, 111, 222);
+test.myApply(null, 111, 222);
 console.log(obj);
