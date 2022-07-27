@@ -9,7 +9,7 @@ Function.prototype.myCall = function (context, ...args) {
   context = Object(context);
   Object.defineProperty(context, fnKey, {
     value: fn,
-    configurable: false,
+    configurable: true,
     enumerable: false,
   });
 
