@@ -1,3 +1,6 @@
+// JS Map 实现，Map有顺序
+// 但JS Map的 get set 时间复杂度是不是 O(1) ？
+
 class LRUCache {
   constructor(maxSize) {
     this.maxSize = maxSize;
@@ -34,7 +37,7 @@ class LRUCache {
       this.map.set(key, value);
 
       // 删除最旧的
-      this.map.delete(this.ma);
+      this.map.delete(this.map.keys().next().value);
     }
   }
 }
