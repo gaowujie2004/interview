@@ -1,17 +1,24 @@
 // 递归函数，入参 obj，如果是对象，则返回一个新的对象。
 
+const { isDate, isRegExp, isSet, isMap } = require('util/types');
+
 const isObject = (val) => !!val && typeof val === 'object';
 
 // key: 要克隆的对象，value: 克隆后的对象
 const map = new Map();
 
+/**
+ * 返回克隆后的新值
+ * @param {*} value
+ * @returns
+ */
 function deepClone(value) {
   // 基本值 || 函数
   if (!isObject(value)) {
     return value;
   }
 
-  // 解决循环引用
+  // 克隆引用值。解决循环引用
   if (map.has(value)) {
     return map.get(value);
   }
@@ -38,6 +45,33 @@ function deepClone(value) {
     }
 
     return newObj;
+  }
+
+  // 日期 & RegExp
+  if ([isRegExp, isDate].some((fn) => fn(value))) {
+    return new value.constructor(value);
+  }
+
+  // Set
+  if (isSet(value)) {
+    const newSet = new value.constructor();
+    map.set(value, newSet);
+
+    for (const item of value) {
+      newSet.add(deepClone(item));
+    }
+    return newSet;
+  }
+
+  // Map
+  if (isMap(value)) {
+    const newMap = new Map();
+    map.set(value, newMap);
+
+    for (const [k, v] of value) {
+      newMap.set(deepClone(k), deepClone(v));
+    }
+    return newMap;
   }
 
   // 其余数据结构，暂不考虑
