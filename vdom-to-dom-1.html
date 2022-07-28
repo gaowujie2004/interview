@@ -1,0 +1,75 @@
+<script>
+  const obj = {
+    tag: 'DIV',
+    props: {
+      id: 'app',
+    },
+    children: [
+      {
+        tag: 'SPAN',
+        children: [{ tag: 'A', props: { id: 'a1' }, children: [] }],
+      },
+      {
+        tag: 'SPAN',
+        children: [{ tag: 'A', props: { id: 'a2' }, children: [] }, { tag: 'A', props: { id: 'a3' }, children: [] }, 'hhhhhh'],
+      },
+    ],
+  };
+
+  // 把上诉虚拟Dom转化成下方真实Dom
+  /* <div id="app">
+      <span>
+        <a></a>
+      </span>
+      <span>
+        <a></a>
+        <a></a>
+      </span>
+    </div>;
+    */
+
+  // 把当前 vdom -》 dom 然后返回
+  function render(vNode) {
+    if (typeof vNode === 'number') return '' + vNode;
+    if (typeof vNode === 'string') return document.createTextNode(vNode);
+
+    /**
+     * @type HTMLElement
+     */
+    const curDOM = document.createElement(vNode.tag);
+    for (const key in vNode.props || {}) {
+      curDOM.setAttribute(key, vNode.props[key]);
+    }
+    const childrenDOM = vNode.children.map((vNode) => render(vNode));
+
+    // 回溯阶段, 第一次curDom->a#a1
+    childrenDOM.forEach((childDOM) => {
+      curDOM.appendChild(childDOM);
+    });
+
+    return curDOM;
+  }
+
+  // 把当前 vdom -》 dom 然后返回
+  function render2(vNode) {
+    if (typeof vNode === 'number') return '' + vNode;
+    if (typeof vNode === 'string') return document.createTextNode(vNode);
+
+    /**
+     * @type HTMLElement
+     */
+    const curDOM = document.createElement(vNode.tag);
+    for (const key in vNode.props || {}) {
+      curDOM.setAttribute(key, vNode.props[key]);
+    }
+
+    vNode.children?.forEach((vChild) => {
+      curDOM.appendChild(render2(vChild));
+    });
+
+    return curDOM;
+  }
+
+  console.log('结果-----', render(obj));
+  console.log('结果2222-----', render2(obj));
+</script>
