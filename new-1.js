@@ -17,7 +17,10 @@ function myNew(fn, ...args) {
   return obj;
 }
 
+/**================================== TEST **/
 function Person(name, age) {
   this.name = name;
   this.age = age;
 }
+const person = myNew(Person, 'gwj', 23);
+console.log(person);
