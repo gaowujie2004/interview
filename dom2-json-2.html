@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>dom2json-2</title>
+  </head>
+  <body>
+    <div>
+      <span>
+        <a></a>
+      </span>
+      <span>
+        <a></a>
+        <a></a>
+      </span>
+    </div>
+    <script>
+      const domRoot = document.querySelector('body > div');
+      // 把上诉dom结构转成下面的JSON格式
+      const res = {
+        tag: 'DIV',
+        children: [
+          {
+            tag: 'SPAN',
+            children: [{ tag: 'A', children: [] }],
+          },
+          {
+            tag: 'SPAN',
+            children: [
+              { tag: 'A', children: [] },
+              { tag: 'A', children: [] },
+            ],
+          },
+        ],
+      };
+
+      // 根据domNode（入参），返回一个vNode（返回）。
+
+      function dom2json(domNode) {
+        // DOM —— 文本节点
+        if (domNode.nodeType === Node.TEXT_NODE) {
+          return domNode.nodeValue;
+        }
+
+        // // DOM —— 注释节点
+        if (domNode.nodeType === Node.COMMENT_NODE) {
+          return `<!--${domNode.nodeValue}-->`;
+        }
+
+        // 封装一个方法，获取有效文本节点 & 元素节点
+        if (domNode.nodeType === Node.ELEMENT_NODE) {
+          const curVNode = {
+            props: {},
+            children: [],
+          };
+          curVNode.tag = domNode.tagName;
+          curVNode.props = [...domNode.attributes].reduce((memo, { name, value }) => {
+            memo[name] = value;
+            return memo;
+          }, {});
+
+          getChildren(domNode).forEach((dom) => {
+            curVNode.children.push(dom2json(dom));
+          });
+
+          return curVNode;
+        }
+
+        // 其余未知节点，兜底
+        return String(domNode);
+      }
+
+      // return [];
+      function getChildren(dom) {
+        if (!dom) return [];
+
+        // 元素、文本、注释，去除空文本节点
+        return [...(dom.childNodes || [])].filter((child) => {
+          if (child.nodeType === Node.ELEMENT_NODE || child.nodeType === Node.COMMENT_NODE) return true;
+          if (child.nodeType === Node.TEXT_NODE) {
+            return child.nodeValue.trim() !== '';
+          }
+        });
+      }
+
+      /**================================== TEST **/
+      console.log('dom -> vdom', dom2json(domRoot));
+    </script>
+  </body>
+</html>
