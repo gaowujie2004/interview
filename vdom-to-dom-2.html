@@ -1,0 +1,67 @@
+<script>
+  const obj = {
+    tag: 'DIV',
+    props: {
+      id: 'app',
+    },
+    children: [
+      {
+        tag: 'SPAN',
+        props: {
+          id: 'span1',
+        },
+        children: [
+          {
+            tag: 'A',
+            props: { id: 'a1' },
+            children: ['a1-1', 'a1-2', 333],
+          },
+        ],
+      },
+      {
+        tag: 'SPAN',
+        props: {
+          id: 'span2',
+        },
+        children: [{ tag: 'A', props: { id: 'a2' }, children: [] }, { tag: 'A', props: { id: 'a3' }, children: [] }, 'hhhhhh'],
+      },
+    ],
+  };
+
+  // 把上诉虚拟Dom转化成下方真实Dom
+  /* 
+  <div id="app">
+    <span>
+      <a></a>
+    </span>
+    <span>
+      <a></a>
+      <a></a>
+    </span>
+  </div>;
+  */
+
+  // 根据一个vnode -> 生成一个真实DOM节点
+  function render(vNode) {
+    if (typeof vNode === 'number' || typeof vNode === 'string') {
+      return document.createTextNode(String(vNode));
+    }
+
+    /**
+     * @type HTMLElement
+     */
+    const curDOM = document.createElement(vNode.tag);
+    if (vNode.props) {
+      for (const key in vNode.props) {
+        curDOM.setAttribute(key, vNode.props[key]);
+      }
+    }
+    vNode.children?.forEach((childVNode) => {
+      curDOM.appendChild(render(childVNode));
+    });
+
+    return curDOM;
+  }
+
+  console.log('虚拟DOM树 -》 真实DOM树', render(obj));
+</script>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>时间分片</title>
+    <style>
+      @keyframes move {
+        to {
+          width: 400px;
+          height: 400px;
+          background-color: skyblue;
+        }
+      }
+      div {
+        width: 200px;
+        height: 200px;
+        background-color: pink;
+        animation: move 4s infinite;
+        position: fixed;
+      }
+    </style>
+  </head>
+  <body>
+    <div>909090</div>
+    <ui class="wrap"></ui>
+    <script>
+      function render(curPage, totalPage, pageSize) {
+        const liWrap = document.createDocumentFragment();
+        const channel = new MessageChannel();
+        const port2 = channel.port2;
+        channel.port1.onmessage = loopImpl;
+
+        // 重复调用，向liWrap插入li
+        // todo: 插入完毕后，就将 liWrap 插入container;
+        function loopImpl(ev) {
+          const curPage = ev.data.curPage;
+
+          if (curPage > totalPage) {
+            container.appendChild(liWrap);
+            return;
+          }
+
+          const li = document.createElement('li');
+          li.innerHTML = Math.random();
+          liWrap.appendChild(li);
+
+          if (curPage % 4 === 0) {
+            container.appendChild(liWrap);
+          }
+
+          port2.postMessage({ curPage: curPage + 1 });
+        }
+
+        port2.postMessage({ curPage });
+      }
+
+      const container = document.querySelector('.wrap');
+      const total = 100_0000; //10条数据
+      const pageSize = 20;
+      render(1, Math.ceil(total / pageSize), pageSize);
+    </script>
+  </body>
+</html>
