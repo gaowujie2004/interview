@@ -16,7 +16,7 @@ function cancelPromise<P extends Promise<unknown>>(pendingPromise: P) {
 }
 
 /**================================== TEST **/
-let testPromise = new Promise((resolve, reject) => {
+let testPromise = new Promise((resolve) => {
   setTimeout(() => {
     resolve(123);
   }, 1000);
